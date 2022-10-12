@@ -33,13 +33,21 @@ spec:
           metadata:
             type: object
           spec:
-            description: CacheSpec defines the desired state of Cache
+            description: Describes the desired configuration for a Cache
             properties:
               infinispan:
-                description: InfinispanSpec defines all Infinispan specific configuration
+                description: Describes the desired configuration for an Infinispan
+                  Cache provider
+                properties:
+                  name:
+                    type: string
                 type: object
               redis:
-                description: RedisSpec defines all Redis specific configuration
+                description: Describes the desired configuration for a Redis Cache
+                  provider
+                properties:
+                  name:
+                    type: string
                 type: object
             type: object
           status:

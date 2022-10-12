@@ -1,6 +1,7 @@
 package v1alpha1
 
 import (
+	gingersnapapi "github.com/gingersnap-project/operator/gen/gingersnap-api/config/cache/v1alpha1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -23,7 +24,7 @@ var _ webhook.Defaulter = &Cache{}
 func (c *Cache) Default() {
 	spec := &c.Spec
 	if spec.Redis == nil && spec.Infinispan == nil {
-		spec.Infinispan = &InfinispanSpec{}
+		spec.Infinispan = &gingersnapapi.InfinispanSpec{}
 	}
 }
 

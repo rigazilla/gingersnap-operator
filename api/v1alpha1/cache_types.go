@@ -1,6 +1,7 @@
 package v1alpha1
 
 import (
+	gingersnapapi "github.com/gingersnap-project/operator/gen/gingersnap-api/config/cache/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -39,8 +40,8 @@ type Cache struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   CacheSpec   `json:"spec,omitempty"`
-	Status CacheStatus `json:"status,omitempty"`
+	Spec   gingersnapapi.CacheSpec `json:"spec,omitempty"`
+	Status CacheStatus             `json:"status,omitempty"`
 }
 
 //+kubebuilder:object:root=true
