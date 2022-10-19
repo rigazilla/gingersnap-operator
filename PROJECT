@@ -33,4 +33,12 @@ resources:
     defaulting: true
     validation: true
     webhookVersion: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: io
+  group: gingersnap-project
+  kind: CachingRule
+  path: github.com/gingersnap-project/operator/api/v1alpha1
+  version: v1alpha1
 version: "3"

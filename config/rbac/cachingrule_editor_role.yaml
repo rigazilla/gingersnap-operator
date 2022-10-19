@@ -1,0 +1,24 @@
+# permissions for end users to edit cachingrules.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cachingrule-editor-role
+rules:
+- apiGroups:
+  - gingersnap-project.io
+  resources:
+  - cachingrules
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - gingersnap-project.io
+  resources:
+  - cachingrules/status
+  verbs:
+  - get

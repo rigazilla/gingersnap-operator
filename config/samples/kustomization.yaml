@@ -2,4 +2,5 @@
 resources:
 - cache/infinispan/minimal.yaml
 - cacheregion/gingersnap-project_v1alpha1_cacheregion.yaml
+- gingersnap-project_v1alpha1_cachingrule.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples
