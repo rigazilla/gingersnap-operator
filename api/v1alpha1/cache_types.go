@@ -1,7 +1,6 @@
 package v1alpha1
 
 import (
-	gingersnapapi "github.com/gingersnap-project/operator/gen/gingersnap-api/config/cache/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -13,12 +12,6 @@ type InfinispanSpec struct {
 
 // RedisSpec defines all Redis specific configuration
 type RedisSpec struct {
-}
-
-// CacheSpec defines the desired state of Cache
-type CacheSpec struct {
-	Infinispan *InfinispanSpec `json:"infinispan,omitempty"`
-	Redis      *RedisSpec      `json:"redis,omitempty"`
 }
 
 // CacheStatus defines the observed state of Cache
@@ -40,8 +33,8 @@ type Cache struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   gingersnapapi.CacheSpec `json:"spec,omitempty"`
-	Status CacheStatus             `json:"status,omitempty"`
+	Spec   CacheSpec   `json:"spec,omitempty"`
+	Status CacheStatus `json:"status,omitempty"`
 }
 
 //+kubebuilder:object:root=true

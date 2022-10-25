@@ -90,8 +90,24 @@ help: ## Display this help.
 manifests: controller-gen ## Generate WebhookConfiguration, ClusterRole and CustomResourceDefinition objects.
 	$(CONTROLLER_GEN) rbac:roleName=manager-role crd:ignoreUnexportedFields=true webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 
+.PHONY: check-and-reinit-submodules
+check-and-reinit-submodules:
+	@if git submodule status | egrep -q '^[-]|^[+]' ; then \
+            echo "INFO: Need to reinitialize git submodules"; \
+            git submodule update --init; \
+    fi
+
+.PHONY: gingersnap-api-generate
+gingersnap-api-generate: check-and-reinit-submodules protoc-gen-go protoc-gen-deepcopy ## Generate code for gingersnap-api
+	PATH=$(PATH):$(LOCALBIN) $(PROTOC) --proto_path=gingersnap-api \
+			--go_out . \
+			--include_source_info \
+			--descriptor_set_out=api/v1alpha1/descriptor \
+			--deepcopy_out . \
+			config/cache/v1alpha1/cache.proto
+
 .PHONY: generate
-generate: controller-gen applyconfiguration-gen ## Generate code
+generate: gingersnap-api-generate controller-gen applyconfiguration-gen ## Generate code
 	$(CONTROLLER_GEN) crd:ignoreUnexportedFields=true object:headerFile="hack/boilerplate.go.txt" paths="./..."
 	./hack/applyconfiguration-gen.sh "$(shell pwd)" "$(APPLYCONFIGURATION_GEN)" "pkg/applyconfigurations"
 
@@ -172,6 +188,9 @@ $(LOCALBIN):
 KUSTOMIZE ?= $(LOCALBIN)/kustomize
 CONTROLLER_GEN ?= $(LOCALBIN)/controller-gen
 APPLYCONFIGURATION_GEN ?= $(LOCALBIN)/applyconfiguration-gen
+PROTOC ?= protoc
+PROTOC_GEN_GO ?= $(LOCALBIN)/protoc-gen-go
+PROTOC_GEN_DEEPCOPY ?= $(LOCALBIN)/protoc-gen-deepcopy
 ENVTEST ?= $(LOCALBIN)/setup-envtest
 GOLANGCI_LINT ?= $(LOCALBIN)/golangci-lint
 MOCKGEN ?= $(LOCALBIN)/mockgen
@@ -180,6 +199,8 @@ MOCKGEN ?= $(LOCALBIN)/mockgen
 KUSTOMIZE_VERSION ?= v3.8.7
 CONTROLLER_TOOLS_VERSION ?= v0.9.0
 K8S_CODEGEN_VERSION ?= v0.24.1
+PROTOC_GEN_GO_TOOLS_VERSION ?= v1.28.1
+PROTOC_GEN_DEEPCOPY_TOOLS_VERSION ?= v0.0.3
 
 KUSTOMIZE_INSTALL_SCRIPT ?= "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"
 .PHONY: kustomize
@@ -192,6 +213,16 @@ else
 KUSTOMIZE = $(shell which kustomize)
 endif
 endif
+
+.PHONY: protoc-gen-go
+protoc-gen-go: $(PROTOC_GEN_GO) ## Download protoc-gen-go locally if necessary.
+$(PROTOC_GEN_GO): $(LOCALBIN)
+	GOBIN=$(LOCALBIN) go install google.golang.org/protobuf/cmd/protoc-gen-go@$(PROTOC_GEN_GO_TOOLS_VERSION)
+
+.PHONY: protoc-gen-deepcopy
+protoc-gen-deepcopy: $(PROTOC_GEN_DEEPCOPY) ## Download protoc-gen-deepcopy locally if necessary.
+$(PROTOC_GEN_DEEPCOPY): $(LOCALBIN)
+	GOBIN=$(LOCALBIN) go install github.com/protobuf-tools/protoc-gen-deepcopy@$(PROTOC_GEN_DEEPCOPY_TOOLS_VERSION)
 
 .PHONY: controller-gen
 controller-gen: $(CONTROLLER_GEN) ## Download controller-gen locally if necessary.

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"time"
 
-	gingersnapapi "github.com/gingersnap-project/operator/gen/gingersnap-api/config/cache/v1alpha1"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -59,10 +58,7 @@ var _ = Describe("Cache Webhooks", func() {
 		Expect(k8sClient.Create(ctx, created)).Should(Succeed())
 
 		Expect(k8sClient.Get(ctx, key, created)).Should(Succeed())
-		spec := created.Spec
 		// Ensure default values correctly set
-		Expect(spec.Infinispan).ShouldNot(BeNil())
-		Expect(spec.Redis).Should(BeNil())
 	})
 
 	It("should ensure that Cache cannot be created with both Infinispan and Redis specs", func() {
@@ -71,10 +67,7 @@ var _ = Describe("Cache Webhooks", func() {
 				Name:      key.Name,
 				Namespace: key.Namespace,
 			},
-			Spec: gingersnapapi.CacheSpec{
-				Infinispan: &gingersnapapi.InfinispanSpec{},
-				Redis:      &gingersnapapi.RedisSpec{},
-			},
+			Spec: CacheSpec{},
 		}
 
 		cause := statusDetailCause{metav1.CauseTypeFieldValueRequired, "spec", "At most one of ['spec.infinispan', 'spec.redis'] must be configured"}
@@ -88,9 +81,7 @@ var _ = Describe("Cache Webhooks", func() {
 				Name:      key.Name,
 				Namespace: key.Namespace,
 			},
-			Spec: gingersnapapi.CacheSpec{
-				Redis: &gingersnapapi.RedisSpec{},
-			},
+			Spec: CacheSpec{},
 		}
 
 		Expect(k8sClient.Create(ctx, created)).Should(Succeed())
@@ -99,7 +90,6 @@ var _ = Describe("Cache Webhooks", func() {
 		updated := &Cache{}
 
 		Expect(k8sClient.Get(ctx, key, updated)).Should(Succeed())
-		updated.Spec.Infinispan = &gingersnapapi.InfinispanSpec{}
 
 		cause := statusDetailCause{metav1.CauseTypeFieldValueRequired, "spec", "At most one of ['spec.infinispan', 'spec.redis'] must be configured"}
 		expectInvalidErrStatus(k8sClient.Update(ctx, updated), cause)

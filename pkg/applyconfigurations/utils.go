@@ -3,8 +3,8 @@
 package applyconfigurations
 
 import (
-	cacheregionv1alpha1 "github.com/gingersnap-project/operator/api/v1alpha1"
 	v1alpha1 "github.com/gingersnap-project/operator/api/v1alpha1"
+	cacheregionv1alpha1 "github.com/gingersnap-project/operator/api/v1alpha1"
 	cachev1alpha1 "github.com/gingersnap-project/operator/pkg/applyconfigurations/cache/v1alpha1"
 	applyconfigurationscacheregionv1alpha1 "github.com/gingersnap-project/operator/pkg/applyconfigurations/cacheregion/v1alpha1"
 	monitoringv1 "github.com/gingersnap-project/operator/pkg/applyconfigurations/monitoring/v1"
