@@ -32,9 +32,8 @@ type ServiceBinding struct {
 type Cache struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-
-	Spec   CacheSpec   `json:"spec,omitempty"`
-	Status CacheStatus `json:"status,omitempty"`
+	Spec              CacheSpec   `json:"spec,omitempty"`
+	Status            CacheStatus `json:"status,omitempty"`
 }
 
 //+kubebuilder:object:root=true

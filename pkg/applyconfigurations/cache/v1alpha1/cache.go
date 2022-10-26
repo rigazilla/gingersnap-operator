@@ -13,7 +13,7 @@ import (
 type CacheApplyConfiguration struct {
 	v1.TypeMetaApplyConfiguration    `json:",inline"`
 	*v1.ObjectMetaApplyConfiguration `json:"metadata,omitempty"`
-	Spec                             *unnameable_Unsupported        `json:"spec,omitempty"`
+	Spec                             *CacheSpecApplyConfiguration   `json:"spec,omitempty"`
 	Status                           *CacheStatusApplyConfiguration `json:"status,omitempty"`
 }
 
@@ -186,8 +186,8 @@ func (b *CacheApplyConfiguration) ensureObjectMetaApplyConfigurationExists() {
 // WithSpec sets the Spec field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Spec field is set to the value of the last call.
-func (b *CacheApplyConfiguration) WithSpec(value unnameable_Unsupported) *CacheApplyConfiguration {
-	b.Spec = &value
+func (b *CacheApplyConfiguration) WithSpec(value *CacheSpecApplyConfiguration) *CacheApplyConfiguration {
+	b.Spec = value
 	return b
 }
 

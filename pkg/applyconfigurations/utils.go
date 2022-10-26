@@ -3,8 +3,8 @@
 package applyconfigurations
 
 import (
-	v1alpha1 "github.com/gingersnap-project/operator/api/v1alpha1"
 	cacheregionv1alpha1 "github.com/gingersnap-project/operator/api/v1alpha1"
+	v1alpha1 "github.com/gingersnap-project/operator/api/v1alpha1"
 	cachev1alpha1 "github.com/gingersnap-project/operator/pkg/applyconfigurations/cache/v1alpha1"
 	applyconfigurationscacheregionv1alpha1 "github.com/gingersnap-project/operator/pkg/applyconfigurations/cacheregion/v1alpha1"
 	monitoringv1 "github.com/gingersnap-project/operator/pkg/applyconfigurations/monitoring/v1"
@@ -19,8 +19,12 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 	// Group=cache, Version=v1alpha1
 	case v1alpha1.SchemeGroupVersion.WithKind("Cache"):
 		return &cachev1alpha1.CacheApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("CacheSpec"):
+		return &cachev1alpha1.CacheSpecApplyConfiguration{}
 	case v1alpha1.SchemeGroupVersion.WithKind("CacheStatus"):
 		return &cachev1alpha1.CacheStatusApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("NamespacedRef"):
+		return &cachev1alpha1.NamespacedRefApplyConfiguration{}
 	case v1alpha1.SchemeGroupVersion.WithKind("ServiceBinding"):
 		return &cachev1alpha1.ServiceBindingApplyConfiguration{}
 
