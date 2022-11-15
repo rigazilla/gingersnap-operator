@@ -23,8 +23,14 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &cachev1alpha1.CacheSpecApplyConfiguration{}
 	case v1alpha1.SchemeGroupVersion.WithKind("CacheStatus"):
 		return &cachev1alpha1.CacheStatusApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("DataSourceSpec"):
+		return &cachev1alpha1.DataSourceSpecApplyConfiguration{}
 	case v1alpha1.SchemeGroupVersion.WithKind("NamespacedRef"):
 		return &cachev1alpha1.NamespacedRefApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("ResourceQuantity"):
+		return &cachev1alpha1.ResourceQuantityApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("Resources"):
+		return &cachev1alpha1.ResourcesApplyConfiguration{}
 	case v1alpha1.SchemeGroupVersion.WithKind("ServiceBinding"):
 		return &cachev1alpha1.ServiceBindingApplyConfiguration{}
 

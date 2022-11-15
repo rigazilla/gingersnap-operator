@@ -36,31 +36,69 @@ spec:
             description: Describes the desired configuration for a Cache. Only DB
               Cache Service is supported atm
             properties:
-              cpu:
-                description: CPU resources profile required for the cache
-                type: string
               dataSource:
-                description: DB connection configuration
+                description: DatasourceRef or a ServiceBindingRef (TODO clarify)
                 properties:
-                  connectionString:
-                    type: string
-                  type:
-                    type: string
+                  connectionProperties:
+                    additionalProperties:
+                      type: string
+                    description: Additional properties. DB specific
+                    type: object
+                  dbType:
+                    description: Type and version of the underlaying DB. Needed to
+                      decide which drivers need to be used
+                    format: int32
+                    type: integer
+                  serviceBindingRef:
+                    description: Reference to the ServiceBinding CR
+                    properties:
+                      name:
+                        description: Resource name
+                        type: string
+                      namespace:
+                        description: Resource namespace
+                        type: string
+                    type: object
                 type: object
-              infinispan:
-                description: Deprecated will be removed
+              resources:
+                description: Resource profile for the cache provider
                 properties:
-                  name:
-                    type: string
-                type: object
-              memory:
-                description: Memory resources profile required for the cache
-                type: string
-              redis:
-                description: Deprecated will be removed
-                properties:
-                  name:
-                    type: string
+                  limits:
+                    description: Describes a resource quantities
+                    properties:
+                      cpu:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        description: CPU quantity
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      memory:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        description: Memory quantity
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                    type: object
+                  requests:
+                    description: Describes a resource quantities
+                    properties:
+                      cpu:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        description: CPU quantity
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      memory:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        description: Memory quantity
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                    type: object
                 type: object
             type: object
           status:
